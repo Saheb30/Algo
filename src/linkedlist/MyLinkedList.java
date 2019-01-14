@@ -1,8 +1,13 @@
 package linkedlist;
 
+import java.util.HashSet;
+import java.util.Set;
+
+
 public class MyLinkedList<T> {
 	Node<T> head;
 	private static int count = 0;
+	private static boolean isLoopPresnt = false;
 
 	static class Node<T> {
 		T data;
@@ -13,7 +18,6 @@ public class MyLinkedList<T> {
 			next = null;
 		}
 	}
-
 	public int size() {
 		return count;
 	}
@@ -80,6 +84,82 @@ public class MyLinkedList<T> {
 		}
 		head = prev;
 	}
-
+	boolean findLoop() {
+		Set<Node<T>> set = new HashSet<>();
+		if (head == null) {
+			System.out.println("No elements"); 
+		}else {
+			Node<T> tempNode = head;
+			while(tempNode.next != null) {
+				if(set.contains(tempNode)) {
+					isLoopPresnt = true;
+					return true;
+				}
+				set.add(tempNode);
+				tempNode = tempNode.next;
+			}
+		}
+		return false;
+	}
+	public MyLinkedList<Integer> createLoop(){
+		MyLinkedList<Integer> myLinkedList = new MyLinkedList<>();
+		myLinkedList.head = new Node<>(1);
+        myLinkedList.head.next = new Node<>(2);
+        Node<Integer> node = myLinkedList.head.next.next = new Node<>(3);
+        myLinkedList.head.next.next.next = new Node<>(4);
+        myLinkedList.head.next.next.next.next = new Node<>(5);
+        myLinkedList.head.next.next.next.next.next = node;
+        return myLinkedList;
+	}
+	public Node<T> findLoopFloydAlgo(){
+		if (head == null) {
+			System.out.println("No elements");
+		} else {
+			Node<T> slow = head;
+			Node<T> fast = head;
+			while (slow != null && fast != null && fast.next != null) {
+				slow = slow.next;
+				fast = fast.next.next;
+				if (slow == fast) {
+					return fast;
+				}
+			}
+		}
+		return null;
+	}
+	public Node<T> getFirstElementOfLoop(){
+		if(isLoopPresnt) {
+			Node<T> slow = head;
+			Node<T> fast = findLoopFloydAlgo();
+			while(slow != fast) {
+				slow = slow.next;
+				fast = fast.next;
+			}
+			return slow;
+		}
+		return null;
+	}
+	public int getLengthOfLoop(){
+		int length = 0;
+		if(isLoopPresnt) {
+			Node<T> slow = head;
+			Node<T> fast = findLoopFloydAlgo();
+			while(slow != fast) {
+				slow = slow.next;
+				fast = fast.next;
+			}
+			/*fast = fast.next;
+			length++;
+			while(fast != slow) {
+				length++;
+				fast = fast.next;
+			}*/
+			do {
+				length++;
+				fast = fast.next;
+			}while(fast != slow);
+		}
+		return length;
+	}
 	
 }
