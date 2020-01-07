@@ -47,4 +47,5 @@ public class MyStack<E> {
 	public E peek() {
 		 return (E) elementData[top];
 	 }
+	
 }

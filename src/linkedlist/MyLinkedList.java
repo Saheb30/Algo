@@ -108,7 +108,8 @@ public class MyLinkedList<T> {
         Node<Integer> node = myLinkedList.head.next.next = new Node<>(3);
         myLinkedList.head.next.next.next = new Node<>(4);
         myLinkedList.head.next.next.next.next = new Node<>(5);
-        myLinkedList.head.next.next.next.next.next = node;
+        myLinkedList.head.next.next.next.next.next = new Node<>(6);
+        myLinkedList.head.next.next.next.next.next.next = node;
         return myLinkedList;
 	}
 	public Node<T> findLoopFloydAlgo(){
@@ -160,6 +161,21 @@ public class MyLinkedList<T> {
 			}while(fast != slow);
 		}
 		return length;
+	}
+	public void rotate(int rotateBy) {
+		Node<T> currentNode = head;
+		Node<T> kthNode = head;
+		Node<T> lastNode = null;
+		for(int i =1;i<rotateBy;i++) {
+			currentNode = currentNode.next;
+		}
+		kthNode = currentNode;
+		while(currentNode.next != null) {
+			currentNode = currentNode.next;
+		}
+		currentNode.next = head;
+		head = kthNode.next;
+		kthNode.next = null;
 	}
 	
 }
